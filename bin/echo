@@ -1,0 +1,4 @@
+local tArgs = { ... }
+for argc, argv in pairs(tArgs) do
+  print(argv)
+end

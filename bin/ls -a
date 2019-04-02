@@ -1,0 +1,12 @@
+local tArgs = { ... }
+print("#tArgs = "..#tArgs)
+if (#tArgs > 0) then
+  dir = tArgs[1]
+else
+  dir = shell.dir()
+end
+
+for k, v in ipairs(fs.list(dir)) do
+  print(v)
+  --textutils.pagedTabulate(v)
+end

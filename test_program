@@ -1,0 +1,6 @@
+test_hash = {}
+
+test_hash["test"] = {"time" = os.time(), "day" = os.day()}
+
+print(textutils.serialise(test_hash))
+

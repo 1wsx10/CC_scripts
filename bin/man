@@ -1,0 +1,4 @@
+file = io.open("/usr/share/man/man1/man", "r")
+for line in file:lines() do
+   textutils.pagedPrint(line)
+end

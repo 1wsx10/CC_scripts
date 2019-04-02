@@ -1,0 +1,9 @@
+local tArgs = { ... }
+if (#tArgs > 0) then
+  outstr = tArgs[1]
+else
+  outstr = 'y'
+end
+while (true) do
+  print(outstr)
+end
