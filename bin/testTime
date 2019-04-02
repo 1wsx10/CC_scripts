@@ -1,0 +1,5 @@
+start = os.time()
+sleep(72)
+end_time = os.time()
+
+print(end_time - start)

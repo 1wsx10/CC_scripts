@@ -14,7 +14,9 @@ valuable = {
 "minecraft:emerald_ore",
 "minecraft:lapis_ore",
 "minecraft:redstone_ore",
-"minecraft:nether_quartz_ore"
+"minecraft:nether_quartz_ore",
+"Railcraft:ore",
+"ProjRed|Exploration:projectred.exploration.ore"
 }
 
 

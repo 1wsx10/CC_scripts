@@ -1,1 +1,10 @@
-shell.setPath(shell.path()..":/bin")
+shell.setPath(shell.path() .. ":/bin/")
+
+--load egps
+if os.loadAPI("/.egpsData/egps") then
+	egps.loadAll()
+	--uncomment these to start with them:
+	--GPS:
+	--egps.setLocationFromGPS()
+end
+

@@ -1,0 +1,37 @@
+width = 20
+height = 20
+
+unction main()
+  turtle.digUp()
+  turtle.digDown()
+  
+  for i = 1,width do
+    for j = 1,height do
+      --mine a line
+      turtle.dig()
+      turtle.forward()
+      turtle.digUp()
+      turtle.digDown()
+    end
+    --turn around
+    if i%2 == 0 then
+      --turn right
+      turtle.turnRight()
+      turtle.dig()
+      turtle.forward()
+      turtle.digUp()
+      turtle.digDown()
+      turtle.turnRight()
+    else
+      --turn left
+      turtle.turnLeft()
+      turtle.dig()
+      turtle.forward()
+      turtle.digUp()
+      turtle.digDown()
+      turtle.turnLeft()
+    end
+  end
+end
+
+main()

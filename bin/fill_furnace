@@ -1,0 +1,26 @@
+
+turtle.select(2)
+turtle.drop()
+
+function main()
+  a = true
+  
+  local t_start = os.time()
+  while true do
+    if a then
+      a = false
+      turtle.select(1)
+    end
+    turtle.drop()
+    if turtle.getItemCount() == 0 then
+      break
+    end
+    coroutine.yield()
+  end
+  local t_end = os.time()
+  
+  print("mc_hrs:")
+  print(t_end - t_start)
+end
+
+main()

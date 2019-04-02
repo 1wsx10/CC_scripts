@@ -1,0 +1,152 @@
+width = 20
+height = 20
+
+
+--turtle.forward = egps.forward
+--turtle.back = egps.back
+--turtle.up = egps.up
+--turtle.down = egps.down
+--turtle.turnLeft = egps.turnLeft
+--turtle.turnRight = egps.turnRight
+
+sX, sY, sZ, sD = egps.locate()
+if not sX then
+  egps.setLocation(0, 0, 0, 0)
+  sX = 0
+  sY = 0
+  sZ = 0
+  sD = 0
+end
+
+fD = sD
+front = egps.deltas[sD]
+lD = (sD + 1) % 4
+left = egps.deltas[lD]
+bD = (sD + 2) % 4
+back = egps.deltas[(sD + 2) % 4]
+rD = (sD + 3) % 4
+right = egps.deltas[(sD + 3) % 4]
+
+-- forward declare functions
+local mul_table, add_table, sub_table, get_single, make_table, mine_all
+
+function main()
+  curr = {sX, sY, sZ}
+  front_end = front
+  front_end = mul_table(front_end, height)
+
+  left_end = left
+  left_end = mul_table(left_end, width)
+
+  frontLeft_end = add_table(left_end, front_end)
+
+  front_end = add_table(front_end, curr)
+  left_end = add_table(left_end, curr)
+  frontLeft_end = add_table(frontLeft_end, curr)
+
+  turtle.digUp()
+  turtle.digDown()
+
+  local endtarget = front_end
+  local startTarget = add_table(curr, left)
+
+
+  while true do
+  	local target = endtarget
+  	while true do
+  		--move towards target
+  		mine_all()
+  		egps.detectAll()
+  		move_towards(target)
+  	end
+  	--go left one
+  	egps.turnTo(lD)
+  	mine_all()
+  	egps.forward()
+  	egps.turnTo(bD)
+  	target = startTarget
+  	while true do
+  		--move back target
+  		mine_all()
+  		egps.detectAll()
+  		move_towards(target)
+  	end
+  	--go right one
+  	egps.turnTo(lD)
+  	mine_all()
+  	egps.forward()
+  	egps.turnTo(fD)
+  	target = startTarget
+
+  	--shuffle along one spot
+  	endTarget = add_table(endTarget, left)
+  	startTarget = add_table(startTarget, left)
+  end
+end
+
+move_towards = function(target)
+	local newcurr = make_table(egps.locate())
+	local vect = sub_table(target, newcurr)
+	local single_vect = get_single(vect)
+	egps.moveTo(single_vect[1], single_vect[2], single_vect[3])
+end
+
+mine_all = function()
+	while turtle.detectUp() do
+		turtle.digUp()
+	end
+	while turtle.detectDown() do
+		turtle.digDown()
+	end
+	while turtle.detect() do
+		turtle.dig()
+	end
+end
+
+make_table = function(x, y, z)
+	local ret = {}
+	ret[1] = x
+	ret[2] = y
+	ret[3] = z
+	return ret
+end
+
+get_single = function(table)
+	local ret = {}
+	for k, v in ipairs(table) do
+		if v == 0 then
+			ret[k] = 0
+		else
+			ret[k] = 1
+		end
+	end
+	return ret
+end
+
+sub_table = function(table, table2)
+	local ret = {}
+	for k, v in ipairs(table) do
+		ret[k] = v - table2[k]
+	end
+	return ret
+end
+
+add_table = function(table, table2)
+	local ret = {}
+	for k, v in ipairs(table) do
+		ret[k] = table2[k] + v
+	end
+	return ret
+end
+
+mul_table = function(table, number)
+  local ret = {}
+  for k,v in ipairs(table) do
+    ret[k] = v * number
+  end
+  return ret
+end
+
+
+-- go
+main()
