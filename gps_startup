@@ -1,0 +1,1 @@
+os.run(_ENV, "/rom/programs/gps", "host", -880, 245, 228)
