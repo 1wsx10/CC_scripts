@@ -1,0 +1,43 @@
+function start_shell()
+  term.clear()
+  term.setCursorPos(1,1)
+  os.run(_ENV, "/rom/programs/shell")
+  os.shutdown()
+end
+
+function start_rednet()
+  shell.run("/z/read_rednet")
+end
+
+function main()
+  
+  co_shell = coroutine.create(start_shell)
+  local shell_ok, shell_filter = coroutine.resume(co_shell)
+  
+  co_rednet = coroutine.create(start_rednet)
+  local rednet_ok, rednet_filter = coroutine.resume(co_rednet)
+  
+  while true do
+    
+    local event = {os.pullEventRaw()}
+
+    
+
+    coroutine.status(co_shell)
+    if not shell_filter or event[1] == shell_filter then
+      shell_ok, shell_filter = coroutine.resume(co_shell, unpack(event))
+    end
+    
+    
+    if rednet_ok and not rednet_filter or event[1] == rednet_filter then
+      rednet_ok, rednet_filter = coroutine.resume(co_rednet, unpack(event))
+    end
+
+    
+  end
+end
+
+
+
+shell.setAlias("ls", "/z/list")
+main()

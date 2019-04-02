@@ -1,0 +1,38 @@
+local open_rednet
+
+function main()
+  
+  open_rednet()
+  
+  local quit = false
+  while not quit do
+--    print(os.pullEvent())
+    event, side, channel, sendId, table = os.pullEvent()
+    if event == "modem_message" then
+      --print("message: ")
+      --print(textutils.serialise(table))
+      --print(table.message)
+      --io.write(table.message)
+      for i = 1,#table.message do
+--        os.queueEvent("char", "a")
+          io.write(string.sub(table.message,i,i))
+      end
+    end
+  end
+  
+end
+
+open_rednet = function()
+  
+  if rednet.isOpen() then return true end
+  
+  for _,side in pairs(redstone.getSides()) do
+    if peripheral.getType(side) == "modem" then
+      rednet.open(side)
+      break
+    end
+  end
+end
+
+
+main()
