@@ -1,0 +1,9 @@
+local granularity = 5
+local time = 0
+local plant
+do
+  plant = turtle.inspectDown()
+  os.sleep(granularity)
+  time = time + granularity
+until (plant.damage = '7')
+print("Plant took ",time,"seconds to mature")
