@@ -1,0 +1,16 @@
+local obs_below
+local succ
+local block
+repeat
+  turtle.digDown()
+  block = turtle.inspect()
+  if (block) then
+    turtle.dig()
+  end
+  turtle.forward()
+  succ, block = turtle.inspectDown()
+  if (succ and block.name == 'minecraft:obsidian')
+    then obs_below = true
+    else obs_below = false
+  end  
+until (obs_below == false)

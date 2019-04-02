@@ -1,0 +1,14 @@
+while true do
+  turtle.turnLeft()
+  turtle.suck()
+  turtle.turnRight()
+  turtle.drop()
+  redstone.setOutput("right", true)
+  sleep(1)
+  redstone.setOutput("right", false)
+  sleep(1)
+  redstone.setOutput("right", true)
+  sleep(1)
+  redstone.setOutput("right", false)
+  sleep(87)
+end
