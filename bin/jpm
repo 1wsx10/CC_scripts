@@ -1,0 +1,17 @@
+local uri = "https://raw.githubusercontent.com/Montandalar/computercraft/master/tree"
+
+local tArgs = { ... }
+if (not (tArgs[1]..' '..tArgs[2] == 'update tree'))
+    then
+  print('Usage: jpm update tree')
+  return
+end
+
+response = http.get(uri)
+if (response ~= nil) then
+  local file = fs.open("/bin/tree", "w")
+  file.write(response.readAll())
+  file.close()  
+else
+  print('No response')
+end

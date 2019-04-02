@@ -1,0 +1,135 @@
+-- Check arguments
+local tArgs = { ... }
+if (#tArgs > 2) then
+  print("Usage: tree <oak|spruce|birch|any|none>")
+  return
+end
+
+george = true
+nogeorge = false
+
+--Sapling damage values
+SAPL_NONE = 4
+SAPL_ANY = 3
+SAPL_BIRCH = 2
+SAPL_SPRUCE = 1
+SAPL_OAK = 0
+
+local treeType
+local height
+
+
+
+-- Check for valid tree type
+function setTreeType(treeType)
+    if (treeType == "oak") then
+        return SAPL_OAK
+    elseif (treeType == "spruce") then
+        return SAPL_SPRUCE
+    elseif (treeType == "birch") then
+        return SAPL_BIRCH
+    elseif (treeType == "none") then
+        return SAPL_NONE 
+    elseif (treeType == nil) then
+        return SAPL_ANY
+    end
+    return -1
+end
+
+function checkForSaplings(treeType)
+    if (treeType == SAPL_NONE) then
+        return true
+    end
+    local inf
+    for i = 1, 16 do
+        turtle.select(i)
+        inf = turtle.getItemDetail()
+
+        if (
+            inf ~= nil and
+            inf.name == 'minecraft:sapling'
+            and (
+                inf.damage == treeType
+                or treeType == SAPL_ANY
+            )
+        ) then return true end
+    end
+    return nogeorge
+end
+
+function checkForTree()
+    local succ, info = turtle.inspect()
+    if (succ and
+        info.name == 'minecraft:log')
+    then return true
+    else return false end
+end
+
+function main(...)
+    local tArgs = {...}
+
+    succ, inf = turtle.inspect()
+    treeType = setTreeType(tArgs[1])
+    if (treeType == -1) then
+        if (treeType == SAPL_ANY) then
+            print('No saplings available.')
+        else 
+            print("'" .. tArgs[1][1] .. "' is not a valid tree type")
+        end
+        return
+    end
+    
+    if (not checkForTree()) then
+        print("No tree in front")
+        return
+    end
+    
+    if (not checkForSaplings(treeType)) then
+        if (treeType == SAPL_ANY) then
+            print('No saplings available')
+        else
+            print("No saplings of type '"..tArgs[1].."'in inventory")
+        end
+        return
+    end
+
+    turtle.dig()
+    turtle.forward()
+
+    height = 0
+    -- Ascend
+    while true do
+        present, info = turtle.inspectUp()
+        print(info)
+        if (not present) then break end
+        if (info.name ~= 'minecraft:log') then break end
+        turtle.digUp()
+        turtle.up()
+        height = height + 1
+    end
+    print("tree height: "..height)
+    
+    -- Descend
+    for i=1,height do
+    turtle.down()
+    end
+    
+    --Check for further down the tree
+    succ, inf = turtle.inspectDown()
+    if (succ and inf.name == 'minecraft:log') then
+        
+    end
+    
+    --Plant a sapling
+    turtle.back()
+    if (treeType ~= SAPL_NONE) then
+    turtle.place()
+    end
+    
+    -- 360 spin
+    for i = 1, 4 do
+    turtle.turnLeft()
+    end
+end
+
+main({...})
