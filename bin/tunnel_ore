@@ -1,0 +1,204 @@
+distance = 100
+placeLight = true
+lightName = "minecraft:torch"
+lightDistance = 11
+veinProgram = "vMiner"
+checkInvDistance = 20
+check_inventory_space = true
+
+valuable = {
+"minecraft:iron_ore",
+"minecraft:diamond_ore",
+"minecraft:coal_ore",
+"minecraft:gold_ore",
+"minecraft:emerald_ore",
+"minecraft:lapis_ore",
+"minecraft:redstone_ore",
+"minecraft:nether_quartz_ore",
+"Railcraft:ore",
+"ProjRed|Exploration:projectred.exploration.ore"
+}
+
+
+local is_valuable, vein, veinUp, veinDown, checkAll, hasSpace, back, selectItem
+
+
+local function main()
+
+	local pos = 0
+	for i=1,distance/2 do
+
+		--print("checking inventory space in "..pos % checkInvDistance.." blocks")
+		if check_inventory_space and (pos % checkInvDistance == 0 or pos % checkInvDistance == 1) then
+			if not hasSpace() then
+				print("Finished early: full inventory at "..pos)
+				back(pos)
+				return
+			end
+		end
+
+	    --forward
+	    checkAll()
+	    turtle.dig()
+	    turtle.forward()
+	    pos = pos + 1
+
+    	--up
+    	checkAll()
+    	while turtle.digUp() do
+    		--nothing!
+    	end
+    	turtle.up()
+
+		--print("placing light in "..pos % lightDistance.." blocks")
+		--place light
+		if placeLight and (pos % lightDistance == 0 or pos % lightDistance == 1) then
+			--print("placing light")
+			if selectItem(lightName) then
+				turtle.digUp()
+				turtle.placeUp()
+			end
+		end
+
+    	--forward
+    	checkAll()
+    	turtle.dig()
+    	turtle.forward()
+    	pos = pos + 1
+
+    	--down
+    	checkAll()
+    	turtle.digDown()
+    	turtle.down()
+
+    end
+
+    back(pos)
+end
+
+selectItem = function(info_name)
+for i = 1,16 do
+	turtle.select(i)
+	detail = turtle.getItemDetail()
+
+	if detail and detail.name == info_name then
+		return true
+	end
+
+end
+return false
+end
+
+back = function(times)
+for i = 1,times do
+	turtle.back()
+end
+end
+
+vein = function()
+shell.run(veinProgram)
+end
+
+veinUp = function()
+turtle.back()
+turtle.digUp()
+turtle.up()
+vein()
+turtle.down()
+turtle.forward()
+end
+
+veinDown = function()
+turtle.back()
+turtle.digDown()
+turtle.down()
+vein()
+turtle.up()
+turtle.forward()
+end
+
+checkAll = function()
+
+if is_valuable(turtle.inspectDown()) then
+	veinDown()
+end
+
+if is_valuable(turtle.inspectUp()) then
+	veinUp()
+end
+
+turtle.turnLeft()
+if is_valuable(turtle.inspect()) then
+	vein()
+end
+
+turtle.turnRight()
+if is_valuable(turtle.inspect()) then
+	vein()
+end
+
+turtle.turnRight()
+if is_valuable(turtle.inspect()) then
+	vein()
+end
+
+turtle.turnLeft()
+
+return true
+end
+
+is_valuable = function(there, info)
+if not there then
+	return false
+end
+
+for k,v in pairs(valuable) do
+	if info.name == v then
+		return true
+	end
+end
+
+return false
+end
+
+hasSpace = function()
+
+--make space
+local items = {}
+
+for i = 1,16 do
+	--go through all positions
+	turtle.select(i)
+	detail = turtle.getItemDetail()
+
+	if detail then
+		for j = 1,#items do
+			if items[j] and items[j].name == detail.name then
+				--move to position
+				turtle.transferTo(j, math.min(turtle.getItemSpace(j), turtle.getItemCount()))
+			end
+		end
+		items[i] = turtle.getItemDetail()
+	end
+
+	if not items[i] then
+		items[i] = false
+	end
+
+end
+
+--now check if there is space
+for i = 1,16 do
+	turtle.select(i)
+	if turtle.getItemCount() == 0 then
+		return true
+	end
+end
+
+return false
+
+end
+
+
+
+main()

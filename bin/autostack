@@ -1,0 +1,27 @@
+
+local function main()
+	local items = {}
+
+	for i = 1,16 do
+		--go through all positions
+		turtle.select(i)
+		detail = turtle.getItemDetail()
+
+		if detail then
+			for j = 1,#items do
+				if items[j] and items[j].name == detail.name then
+					--move to position
+					turtle.transferTo(j, math.min(turtle.getItemSpace(j), turtle.getItemCount()))
+				end
+			end
+			items[i] = turtle.getItemDetail()
+		end
+
+		if not items[i] then
+			items[i] = false
+		end
+
+	end
+end
+
+main()

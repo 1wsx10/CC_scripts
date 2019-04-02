@@ -1,0 +1,18 @@
+ local file = fs.open("temp", "w")
+	local zones = {}
+ local cx, cy, cz, cd = egps.locate()
+	zones[1] = egps.createZone(cx, cy, cz, cx + 2, cy+1, cz + 3)
+ local path = egps.create_path(zones, "x,z,-y")
+	for idx, coord in pairs(path) do
+  print("moving to: "..coord[1].." "..coord[2].." "..coord[3])
+  file.write(table.concat(coord, ", ") .. "\n")
+		egps.moveTo(coord[1], coord[2], coord[3])
+		if coord[4] == egps.Down then
+			--turtle.digDown()
+   --print("would dig down")
+		else
+   --print("would dig down")
+			--turtle.dig()
+		end
+	end
+file.close()

@@ -1,0 +1,24 @@
+shell.run("/home/angel/.bashrc");
+shell.setPath(shell.path() .. ":/bin")
+shell.setAlias("reboot", "fastreboot")
+
+
+if fs.exists("/.egpsData/egps.lua") then
+
+  if fs.exists("/.egpsData/egps") then
+    fs.delete("/.egpsData/egps")
+  end
+
+  fs.move("/.egpsData/egps.lua", "/.egpsData/egps")
+end
+
+--load egps
+if os.loadAPI("/.egpsData/egps") then
+	egps.loadAll()
+	--uncomment these to start with them:
+	--GPS:
+	--egps.setLocationFromGPS()
+ egps.setLocation(0, 0, 0, 0)
+end
+
+--shell.run("vMiner")

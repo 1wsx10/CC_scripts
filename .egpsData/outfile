@@ -1,0 +1,98 @@
+{
+  [ "-70:86:267" ] = {
+    block = {
+      true,
+      {
+        name = "minecraft:planks",
+        metadata = 1,
+      },
+    },
+    time = {
+      {
+        day = 144,
+        time = 11.579,
+      },
+    },
+  },
+  [ "-70:84:266" ] = {
+    block = {
+      true,
+      {
+        name = "minecraft:planks",
+        metadata = 1,
+      },
+    },
+    time = {
+      {
+        day = 144,
+        time = 11.731,
+      },
+    },
+  },
+  [ "-70:85:268" ] = {
+    block = {
+      true,
+      {
+        name = "minecraft:chest",
+        metadata = 2,
+      },
+    },
+    time = {
+      {
+        day = 144,
+        time = 10.579,
+      },
+    },
+  },
+  [ "-70:84:267" ] = {
+    block = {
+      true,
+      {
+        name = "minecraft:planks",
+        metadata = 1,
+      },
+    },
+    time = {
+      {
+        day = 144,
+        time = 10.579,
+      },
+    },
+  },
+  [ "-70:86:266" ] = {
+    block = {
+      false,
+      "No block to inspect",
+    },
+    time = {
+      {
+        day = 144,
+        time = 11.731,
+      },
+    },
+  },
+  [ "-70:85:267" ] = {
+    block = {
+      false,
+      "No block to inspect",
+    },
+    time = {
+      {
+        day = 144,
+        time = 11.731,
+      },
+    },
+  },
+  [ "-70:85:266" ] = {
+    block = {
+      false,
+      "no block to inspect",
+    },
+    time = {
+      {
+        day = 144,
+        time = 11.731,
+      },
+    },
+  },
+}

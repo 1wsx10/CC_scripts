@@ -1,0 +1,19 @@
+times = 50
+
+function digAll()
+  turtle.dig()
+  turtle.digUp()
+  turtle.digDown()
+end
+
+for i = 1,times do
+  digAll()
+  turtle.forward()
+  digAll()
+  turtle.down()
+end
+
+for i = 1,times do
+  turtle.up()
+  turtle.back()
+end

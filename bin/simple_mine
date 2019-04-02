@@ -1,0 +1,12 @@
+max = 100
+
+for i = 1,max do
+  turtle.dig()
+  turtle.forward()
+  turtle.digUp()
+  turtle.digDown()
+end
+
+for i = 1,max do
+  turtle.back()
+end

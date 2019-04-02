@@ -1,0 +1,36 @@
+function refuel(fuel)
+  turtle.select(16)
+  if turtle.getFuelLevel() < fuel then
+    print("need fuel in slot 16")
+    print("fuel needed: "..fuel)
+    print("tank: "..math.floor(100*turtle.getFuelLevel()/(fuel)).."%")
+    --print("Press any key to continue")
+    --os.pullEvent("key")
+    while turtle.getItemCount(16) < 1 do 
+      sleep(0)
+    end
+    os.sleep(1)
+    oldfuel = turtle.getFuelLevel()
+    turtle.refuel(1)
+    fuelvalue = turtle.getFuelLevel() - oldfuel
+    if (fuelvalue*turtle.getItemCount(16) <= fuel-turtle.getFuelLevel()) then
+      turtle.refuel(turtle.getItemCount(16))
+      refuel(fuel)
+    else
+      turtle.refuel(math.ceil((fuel-turtle.getFuelLevel())/fuelvalue))
+    end
+  end
+  print("Tank Full")
+  turtle.select(1)
+end
+
+term.clear()
+term.setCursorPos(1, 1)
+print("1wsx10 refuel program v1.2")
+local input = { ... }
+if #input ~= 1 then
+  print("please enter a single value for fuel")
+  input[1] = tonumber(read())
+end
+input[1] = input[1] + 0 --this line converts from string to int
+refuel(input[1])
