@@ -1,0 +1,13 @@
+rednet.open("back")
+
+while true do
+  event, char = os.pullEvent()
+  
+  if event == "char" then
+    rednet.broadcast(char)
+  end
+end
+
+
+rednet.broadcast("test")
+
