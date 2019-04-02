@@ -1,0 +1,6 @@
+local tArgs = {...}
+for i = 1, #tArgs do
+  file = fs.open(shell.resolve(tArgs[i]), 'r')
+  local contents = file.readAll()
+  textutils.pagedPrint(contents)
+end
