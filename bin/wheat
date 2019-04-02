@@ -1,0 +1,18 @@
+turtle.digDown()
+local succ = false
+for i = 1, 16 do
+  turtle.select(i)
+  item = turtle.getItemDetail()
+  if (item ~= nil and
+      item.name
+      == 'minecraft:wheat_seeds')
+  then
+    succ = true
+    break
+  end
+end
+if (not succ) then
+  print("Out of seeds")
+  return
+end
+turtle.placeDown()
