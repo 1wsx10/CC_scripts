@@ -1,0 +1,57 @@
+
+local doo, place_and_up, make_pillar
+
+local height = 0
+
+function main()
+  doo(make_pillar, 5)
+  doo(turtle.down, height)
+end
+
+make_pillar = function()
+  turtle.forward()
+  turtle.turnLeft()
+  turtle.forward()
+  turtle.turnRight()
+  doo(place_and_up, 27)
+end
+
+doo = function(action, number)
+  for i = 1,number do
+    action()
+  end
+end
+
+place_and_up = function()
+  if not get_block() then
+    doo(turtle.down, height)
+    local flag = false
+    while not flag or not get_block() do
+      flag = true
+      print("please insert stone, then press the any key")
+      os.pullEvent("key")
+    end
+    doo(turtle.up, height)
+  end
+  
+  turtle.place()
+  turtle.up()
+  height = height + 1
+end
+
+get_block = function()
+  local data = turtle.getItemDetail()
+  if data and data.name == "minecraft:stone" then
+    return true
+  end
+  for i = 1,16 do
+    turtle.select(i)
+    data = turtle.getItemDetail()
+    if data and data.name == "minecraft:stone" then
+      return true
+    end
+  end
+  return false
+end
+
+main()

@@ -1,0 +1,36 @@
+
+function go(blocks)
+  for i = 1,blocks do
+    turtle.forward()
+  end
+end
+
+
+function main()
+  
+  
+  while true do
+    --go to tank
+    turtle.turnLeft()
+    go(3)
+    turtle.turnLeft()
+    go(12)
+    turtle.drop()
+    sleep(1)
+    turtle.suck()
+    --go to creasote
+    turtle.turnLeft()
+    go(3)
+    turtle.turnLeft()
+    go(12)
+    turtle.drop()
+    sleep(1)
+    turtle.suck()
+    ok, bucket = turtle.getItemDetail()
+    if not ok or bucket.name ~= "Railcraft:fluid.creosote.bucket" then
+      return
+    end
+  end
+  
+end
+main()
