@@ -1,0 +1,106 @@
+-- eCtrl - manual turtle control for egps
+-- modified from mCtrl (made for magicTurtle api)
+--
+-- Keys:
+-- W,A,S,D = Movement (North, West, South, East)
+-- E,C     = Up, Down
+-- F       = Break front block
+-- X       = Quick Map blocks (forward, down, up) - should not be needed
+-- Z       = Maps blocks around Turtle
+-- R       = Refuel (if fuel is needed)
+-- 1,2,3,4 = Place block from that slot number
+-- Q       = Quit
+
+a = textutils.serialise(egps.getCachedWorld())
+if a == "" then
+	egps.load()
+end
+local run = true
+
+cardinal = false
+
+function update()
+	local x,y,z,d = egps.locate()
+	if(not x) then
+		--locate didn't do... set location?
+		egps.setLocation(0,0,0,0)
+		x,y,z,d = egps.locate()
+	end
+	egps.drawMap(x, y, z)
+	egps.drawTurtleOnMap(x, y, z, x, y, z, d)
+	term.setCursorPos(1, 1)
+
+	if(turtle.getFuelLevel() ~= "unlimited") then
+		term.setCursorPos(1,13)
+		term.write("Fuel: "..turtle.getFuelLevel())
+	end
+end
+
+update() -- Draw inital map
+while run do
+local event, p1, p2, p3, p4, p5 = os.pullEvent()-- Listen for key events
+if(event == "char") then
+if(p1 == "q") then -- Quits out of the program and cleans the screen
+	run = false
+	term.clear()
+	term.setCursorPos(1,1)
+elseif(p1 == "e") then -- Move Up
+	egps.up()
+	update()
+elseif(p1 == "c") then -- Move Down
+	egps.down()
+	update()
+elseif(p1 == "w") then -- Move North
+	if(cardinal) then
+		egps.turnTo(0)
+	end
+	egps.forward()
+	update()
+elseif(p1 == "a") then -- Move West
+	if(cardinal) then
+		egps.turnTo(1)
+		egps.forward()
+	else
+		egps.turnLeft()
+	end
+	update()
+elseif(p1 == "s") then -- Move South
+	if(cardinal) then
+		egps.turnTo(2)
+		egps.forward()
+	else
+		egps.back()
+	end
+	update()
+elseif(p1 == "d") then -- Move East
+	if(cardinal) then
+		egps.turnTo(3)
+		egps.forward()
+	else
+		egps.turnRight()
+	end
+	update()
+elseif(p1 == "f") then -- Break block
+	turtle.dig()
+	egps.detectAll()
+	update()
+elseif(p1 == "x") then -- Map forward, floor, ceil
+	egps.detectAll()
+	update()
+elseif(p1 == "z") then -- Map all sides
+	egps.detectAll()
+	for i=1, 3 do
+egps.turnRight()--TODO make smart version that only goes direction needed
+egps.detectAll()
+end
+update()
+elseif(p1 == "r" and turtle.getFuelLevel() < 200) then -- Refuel (if needed)
+	shell.run("refuel", "400")
+	update()
+elseif(p1 == "1" or p1 == "2" or p1 == "3" or p1 == "4") then -- Place block
+	turtle.place(tonumber(p1))
+	egps.detectAll()
+	update()
+end
+end
+end
