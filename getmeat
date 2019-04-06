@@ -1,0 +1,19 @@
+px,py,pz,pd = egps.getWaypoint("pigfarm")
+cx,cy,cz,cd = egps.getWaypoint("pigfarm_chest")
+ox,oy,oz,od = egps.locate()
+
+egps.moveTo(px,py,pz,pd)
+
+--turn on redstone downward, wait 20s
+redstone.setOutput("bottom", true)
+sleep(20)
+
+--turn off redstone
+redstone.setOutput("bottom", false)
+
+egps.moveTo(cx,cy,cz,cd)
+
+--grab all things from the chest
+turtle.suck(64)
+
+egps.moveTo(ox,oy,oz,od, 0)

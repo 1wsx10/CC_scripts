@@ -1,0 +1,116 @@
+
+trees = {
+	"treepos 1",
+	"treepos 2",
+	"treepos 3",
+	"treepos 4",
+	"treepos 5",
+	"treepos 6",
+	"treepos L2 1",
+	"treepos L2 2",
+	"treepos L2 3",
+	"treepos L2 4",
+	"treepos L2 5",
+	"treepos L2 6",
+	"treepos L2 7",
+	"treepos L2 8",
+}
+
+missed = {}
+
+errors = {}
+
+
+function breakLeaves()
+	local isThere, data = turtle.inspect();
+	if(isThere and data.name == "minecraft:leaves") then
+		turtle.dig()
+		turtle.turnLeft()
+		turtle.dig()
+		turtle.turnLeft()
+		turtle.dig()
+		turtle.turnLeft()
+		turtle.dig()
+		turtle.turnLeft()
+	end
+end
+
+function cutTree()
+	local isThere, data = turtle.inspect()
+	if(isThere) then
+		if(data.name == "minecraft:sapling") then
+			return
+		end
+	end
+
+	turtle.dig()
+	egps.forward()
+
+	isThere, data = turtle.inspectUp()
+	while(isThere and data.name == "minecraft:log") do
+		breakLeaves()
+
+		turtle.digUp()
+		egps.up()
+		isThere, data = turtle.inspectUp()
+	end
+
+	if(isThere and data.name == "minecraft:leaves") then
+		breakLeaves()
+		turtle.digUp()
+	end
+end
+
+function findItem(itemname)
+	for i = 1, 16 do
+		turtle.select(i)
+		local data = turtle.getItemDetail()
+
+		if data and data.name == itemname then
+			return true
+		end
+	end
+	return false
+end
+
+function replant(x, y, z, d)
+	egps.moveTo(x, y, z, d)
+
+
+	if(findItem("minecraft:sapling")) then
+		local success, reason = turtle.place()
+		if(not success) then
+			table.insert(errors, {reason, {x, y, z, d}})
+		end
+	else
+		-- no saplings, mark this to return to with saplings later
+		table.insert(missed, {x,y,z,d})
+	end
+end
+
+function main()
+	local ox, oy, oz, od = egps.locate()
+
+	for _, waypoint in pairs(trees) do
+		local wx, wy, wz, wd = egps.getWaypoint(waypoint)
+		if(wx ~= nil) then
+			print("cutting tree: ", waypoint)
+			egps.moveTo(wx,wy,wz,wd)
+
+			cutTree()
+
+			replant(wx, wy, wz, wd)
+		end
+	end
+
+	for _, coords in pairs(missed) do
+		if(findItem) then
+			replant(coords[1], coords[2], coords[3], coords[4])
+		end
+	end
+
+	print("returning home")
+	egps.moveTo(ox,oy,oz,od)
+end
+
+main()
